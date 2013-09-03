@@ -1,0 +1,17 @@
+xgcom (0.04.2-3) UNRELEASED; urgency=low
+
+  * set vte font to "Droid Sans Mono 12"
+
+ -- coolshou <coolshou@coolshou-ubuntu>  Thu, 20 Aug  2013 10:12:22 +0800
+
+xgcom (0.04.2-1svn48) UNRELEASED; urgency=low
+
+  * 0.04.2-1svn48
+
+ -- coolshou <coolshou@coolshou-ubuntu>  Mon, 24 Dec 2012 22:38:17 +0800
+
+xgcom (0.04.2-1) unstable; urgency=low
+
+  * Initial release
+
+ -- coolshou <coolshou@coolshou-ubuntu>  Mon, 24 Dec 2012 22:14:22 +0800

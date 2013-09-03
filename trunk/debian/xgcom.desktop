@@ -1,0 +1,19 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=xgcom
+Name[zh_TW]=xgcom 串口調試工具
+Comment=A gui tools to help guys debug programs remotely by series port
+Comment[zh_TW]=圖形化串口調試工具
+GenericName=xgcom
+GenericName[zh_TW]=xgcom 串口調試工具
+X-GNOME-FullName=xgcom
+X-GNOME-FullName[zh_TW]=xgcom 串口調試工具
+Exec=xgcom %u
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=/usr/share/xgcom/pixmaps/xgcom.png
+Categories=GTK;Development;
+StartupWMClass=xgcom
+StartupNotify=true

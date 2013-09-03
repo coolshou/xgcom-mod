@@ -1,0 +1,27 @@
+Source: xgcom
+Section: comm
+Priority: extra
+Maintainer: coolshou <coolshou@coolshou-ubuntu>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, libvte-dev, libatk1.0-dev, libgtk2.0-dev, libpango1.0-dev, libfreetype6-dev, libfontconfig1-dev, libcairo2-dev, libx11-dev, libgdk-pixbuf2.0-dev, libglib2.0-dev 
+Standards-Version: 3.9.3
+Homepage: http://code.google.com/p/xgcom/
+#Vcs-Git: git://git.debian.org/collab-maint/xgcom.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/xgcom.git;a=summary
+
+Package: xgcom
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: A gui tools to help guys debug programs remotely by series port, like minicom
+ 1.send and receive data from com
+ 2.configure the com (speed,data bit, stop bit, odd bit, contrl data)
+ 3.sace and load the configure file (speed,data bit, stop bit, odd bit, data contrl)
+ 4.show the data in HEX format
+ 5.count the num of receive and send data (by byte)
+ 6.log the receive data into file (append or cover) The log file path: getenv("HOME")/data_uart_time.txt
+ 7.send file (choose and send file)
+ 8.send data in HEX format
+ 9.send data by interval， you can set the time by yourself
+ 10.show ico in panel (you can show or hide the window by clicking it)
+ 11.can type character in receive area, (just like minicom)
+ 12.set the default configure file
+ 13.local echo. 
