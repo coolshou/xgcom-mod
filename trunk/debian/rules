@@ -9,18 +9,25 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+DEBVERS := $(shell dpkg-parsechangelog | sed -n -e 's/^Version: //p')
+#VERSION := $(shell echo '$(DEBVERS)' | sed -e 's/^[[:digit:]]*://' -e 's/[~-].*//')
+VERSION := $(DEBVERS)
+
 %:
 	dh $@  --with autotools-dev
 
 override_dh_auto_configure:
+	#TODO: establish version in  configure.in
+	#AM_INIT_AUTOMAKE(xgcom, 0.04.3)
+	
 	./autogen.sh
 	dh_auto_configure --
 	
 override_dh_install:
 	mkdir -p debian/xgcom/usr/share/pixmaps/
-	cp -R debian/xgcom.xpm debian/xgcom/usr/share/pixmaps/xgcom.xpm
+	cp -R pixmaps/xgcom.xpm debian/xgcom/usr/share/pixmaps/xgcom.xpm
 	mkdir -p debian/xgcom/usr/share/applications/
-	cp -R debian/xgcom.desktop debian/xgcom/usr/share/applications/xgcom.desktop
+	cp -R pixmaps/xgcom.desktop debian/xgcom/usr/share/applications/xgcom.desktop
 	dh_install
 
 override_dh_installmenu:
