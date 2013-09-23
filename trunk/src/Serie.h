@@ -19,12 +19,16 @@
 
 #include <gtk/gtk.h>
 #include "support.h"
+
+#define BUFFER_RECEPTION 8192
+
 int config_uart(struct xcomdata *xcomdata);
 
 void check_port(struct xcomdata *xcomdata);
 int open_uart(struct xcomdata *xcomdata);
 int write_uart(char *buf, int len);
-int read_uart(void);
+//int read_uart(void);
+gboolean read_uart (GIOChannel *source, GIOCondition condition, gpointer data);
 int hex_send(char * text);
 void save_vte_data_to_file(char *ch, char *path);
 int char_type(char ch);

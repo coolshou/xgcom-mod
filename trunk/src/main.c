@@ -46,8 +46,9 @@ int main (int argc, char *argv[])
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 #endif
-
-	gtk_set_locale ();
+	//not work on gtk3
+	//gtk_set_locale ();
+	setlocale (LC_ALL, NULL);
 	gtk_init (&argc, &argv);
 
 	add_pixmap_directory (PACKAGE_DATA_DIR "/" PACKAGE "/pixmaps");
@@ -60,12 +61,16 @@ int main (int argc, char *argv[])
 	
 	panel_icon_pixbuf = create_pixbuf ("xgcom.png");
 	icon = gtk_status_icon_new_from_pixbuf (panel_icon_pixbuf);
-	gtk_status_icon_set_tooltip(icon,"Xcomtool");
+	//not work in gtk3
+	//gtk_status_icon_set_tooltip(icon,"Xcomtool");
+	gtk_status_icon_set_tooltip_text(icon,"Xcomtool");
 	g_signal_connect((gpointer)icon, "activate", G_CALLBACK(callback_icon), main_windown);
 	
 	gtk_widget_show (main_windown);
-
+	//TODO: window geometry, position ...
+	
 	init_from_config_file(&xcomdata);
+	//show config uart dialog
 	show_uart_param(&xcomdata);
 
 	gtk_main(); 
@@ -84,6 +89,7 @@ void callback_icon(GtkStatusIcon *status_icon,gpointer data)
 	}
 }
 
+//initial config value
 void init_xcomdata(struct xcomdata *xcomdata)
 {
 	xcomdata->fd = -1;
@@ -128,6 +134,7 @@ void init_xcomdata(struct xcomdata *xcomdata)
 	xcomdata->ginterval = NULL;
 }
 
+//load config from config file
 void init_from_config_file(struct xcomdata *xcomdata)
 {
 	struct stat my_stat;

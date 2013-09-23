@@ -278,7 +278,8 @@ on_keep_send_toggled (GtkToggleButton *togglebutton, gpointer user_data)
 	
 	if(is_keep_send){
 		if (time_handl)
-			gtk_timeout_remove(time_handl);	
+			//gtk_timeout_remove(time_handl);	
+			g_source_remove(time_handl);
 		is_keep_send =0;
 	} else {
 		xcomdata->interval = atoi(gtk_entry_get_text(GTK_ENTRY(xcomdata->ginterval)));

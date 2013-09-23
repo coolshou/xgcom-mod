@@ -87,14 +87,15 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	GtkWidget *ok_button;
 
 	cfg_dialog = gtk_dialog_new ();
-	gtk_widget_set_size_request (cfg_dialog, 240, 260);
+	gtk_widget_set_size_request (cfg_dialog, 300, 300);
 	gtk_window_set_title (GTK_WINDOW (cfg_dialog), _("configuration"));
 	gtk_window_set_position (GTK_WINDOW (cfg_dialog), GTK_WIN_POS_CENTER_ON_PARENT);
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (cfg_dialog), TRUE);
 	cfg_dialog_icon_pixbuf = create_pixbuf ("xgcom.png");
 	if (cfg_dialog_icon_pixbuf) {
 		gtk_window_set_icon (GTK_WINDOW (cfg_dialog), cfg_dialog_icon_pixbuf);
-		gdk_pixbuf_unref (cfg_dialog_icon_pixbuf);
+		//gdk_pixbuf_unref (cfg_dialog_icon_pixbuf);
+		g_object_unref(cfg_dialog_icon_pixbuf);
 	}
 	gtk_window_set_type_hint (GTK_WINDOW (cfg_dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_window_set_gravity (GTK_WINDOW (cfg_dialog), GDK_GRAVITY_CENTER);
@@ -161,7 +162,9 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 		(GtkAttachOptions) (0), 0, 0);
 	gtk_misc_set_alignment (GTK_MISC (label_control), 0, 0.5);
 
-	com_port = gtk_combo_box_entry_new_text ();
+	//com_port = gtk_combo_box_entry_new_text ();
+	//com_port = gtk_combo_box_new_with_entry();
+	com_port = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_port);
 	gtk_table_attach (GTK_TABLE (setup_tablel), com_port, 1, 2, 0, 1,
 		(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
@@ -171,17 +174,22 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	for (i = 0; i < NUMBER_OF_DEVICES; i++) {
 		if(stat(devices_list[i], &my_stat) == 0)
 			//liste = g_list_append(liste, devices_list[i]);
-			gtk_combo_box_append_text (GTK_COMBO_BOX (com_port),devices_list[i]);
+			//gtk_combo_box_append_text (GTK_COMBO_BOX (com_port),devices_list[i]);
+			gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(com_port),devices_list[i]);
 	}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_port), 0);
 	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_port)->child), FALSE);	
+	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_port)->child), FALSE);
 
-	com_rate = gtk_combo_box_entry_new_text ();
+	//com_rate = gtk_combo_box_entry_new_text ();
+	//com_rate = gtk_combo_box_new_with_entry();
+	com_rate = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_rate);
 	gtk_table_attach (GTK_TABLE (setup_tablel), com_rate, 1, 2, 1, 2,
 		(GtkAttachOptions) (GTK_FILL),
 		(GtkAttachOptions) (GTK_FILL), 0, 0);
 	gtk_widget_set_size_request (com_rate, 100, -1);
+	/*
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("300"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("600"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("1200"));
@@ -192,57 +200,103 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("38400"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("57600"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("115200"));
-	gtk_combo_box_set_active(GTK_COMBO_BOX(com_rate), 5);
-	gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_rate)->child), FALSE);	 
+	*/
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("300"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("600"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("1200"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("2400"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("4800"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("9600"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("19200"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("38400"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("57600"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("115200"));
 
-	com_dbits = gtk_combo_box_entry_new_text ();
+	gtk_combo_box_set_active(GTK_COMBO_BOX(com_rate), 5);
+	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_rate)->child), FALSE);	 
+	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_rate)->child), FALSE);
+	
+	//com_dbits = gtk_combo_box_entry_new_text ();
+	//com_dbits = gtk_combo_box_new_with_entry();
+	com_dbits = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_dbits);
 	gtk_table_attach (GTK_TABLE (setup_tablel), com_dbits, 1, 2, 2, 3,
 		(GtkAttachOptions) (GTK_FILL),
 		(GtkAttachOptions) (GTK_FILL), 0, 0);
 	gtk_widget_set_size_request (com_dbits, 100, -1);
+	/*
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_dbits), _("5"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_dbits), _("6"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_dbits), _("7"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_dbits), _("8"));
+	*/
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_dbits), _("5"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_dbits), _("6"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_dbits), _("7"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_dbits), _("8"));
+	
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_dbits), 3);
-	gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_dbits)->child), FALSE);  
-
-	com_sbits = gtk_combo_box_entry_new_text ();
+	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_dbits)->child), FALSE);  
+	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_dbits)->child), FALSE);
+	
+	//com_sbits = gtk_combo_box_entry_new_text ();
+	//com_sbits = gtk_combo_box_new_with_entry();
+	com_sbits  = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_sbits);
 	gtk_table_attach (GTK_TABLE (setup_tablel), com_sbits, 1, 2, 3, 4,
 		(GtkAttachOptions) (GTK_FILL),
 		(GtkAttachOptions) (GTK_FILL), 0, 0);
 	gtk_widget_set_size_request (com_sbits, 100, -1);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_sbits), _("1"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_sbits), _("2"));
+	//gtk_combo_box_append_text (GTK_COMBO_BOX (com_sbits), _("1"));
+	//gtk_combo_box_append_text (GTK_COMBO_BOX (com_sbits), _("2"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_sbits), _("1"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_sbits), _("2"));
+	
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_sbits), 0);
-	gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_sbits)->child), FALSE);   
+	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_sbits)->child), FALSE);   
+	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_sbits)->child), FALSE);
 
-	com_parity = gtk_combo_box_entry_new_text ();
+	//com_parity = gtk_combo_box_entry_new_text ();
+	//com_parity = gtk_combo_box_new_with_entry();
+	com_parity  = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_parity);
 	gtk_table_attach (GTK_TABLE (setup_tablel), com_parity, 1, 2, 4, 5,
 		(GtkAttachOptions) (GTK_FILL),
 		(GtkAttachOptions) (GTK_FILL), 0, 0);
 	gtk_widget_set_size_request (com_parity, 100, -1);
+	/*
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_parity), _("None"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_parity), _("Odd"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_parity), _("Even"));
 	gtk_combo_box_append_text (GTK_COMBO_BOX (com_parity), _("Space"));
+	*/
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_parity), _("None"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_parity), _("Odd"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_parity), _("Even"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_parity), _("Space"));
+	 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_parity), 0);
-	gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_parity)->child), FALSE);   
+	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_parity)->child), FALSE);   
+	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_parity)->child), FALSE);
 
-	com_flow = gtk_combo_box_entry_new_text ();
+	//com_flow = gtk_combo_box_entry_new_text ();
+	//com_flow = gtk_combo_box_new_with_entry();
+	com_flow  = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_flow);
 	gtk_table_attach (GTK_TABLE (setup_tablel), com_flow, 1, 2, 5, 6,
 		(GtkAttachOptions) (GTK_FILL),
 		(GtkAttachOptions) (GTK_FILL), 0, 0);
 	gtk_widget_set_size_request (com_flow, 100, -1);
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_flow), _("None"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_flow), _("Hardware"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_flow), _("Software"));
+//	gtk_combo_box_append_text (GTK_COMBO_BOX (com_flow), _("None"));
+//	gtk_combo_box_append_text (GTK_COMBO_BOX (com_flow), _("Hardware"));
+//	gtk_combo_box_append_text (GTK_COMBO_BOX (com_flow), _("Software"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_flow), _("None"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_flow), _("Hardware"));
+	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_flow), _("Software"));
+	
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_flow), 0);
-	gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_flow)->child), FALSE);   
+	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_flow)->child), FALSE);   
+	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_flow)->child), FALSE);
 
 	setup_label = gtk_label_new (_("\74b\76Setup\74\57b\76"));
 	gtk_widget_show (setup_label);

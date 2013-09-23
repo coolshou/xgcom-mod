@@ -55,6 +55,7 @@ void save_cfg_file(struct xcomdata *xcomdata)
 	do_save_cfg_file(comcfg, xcomdata->cfg_file);
 }
 
+//read config line by line
 int do_read_config(struct xcomdata *xcomdata, char *path)
 {
 	int fd = 0;
@@ -138,6 +139,7 @@ static int read_line(int fd, char *bufv)
 	return 0;
 }
 
+//set config line to struct xcomdata
 static int do_setconfig(struct xcomdata *xcomdata, char *bufv)
 {
 	char *ch = NULL;

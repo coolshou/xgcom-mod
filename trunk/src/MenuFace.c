@@ -47,7 +47,7 @@ GtkWidget* create_menu (GtkWidget *main_windown, GtkWidget *main_vbox,
 	GtkWidget *local_echo;
 	GtkWidget *send_break;
 	GtkWidget *config;
-	GtkWidget *config_font;
+	GtkWidget *config_option;
 	
 	GtkWidget *menuitem_tool;
 	GtkWidget *menu_tool;
@@ -106,9 +106,9 @@ GtkWidget* create_menu (GtkWidget *main_windown, GtkWidget *main_vbox,
 	gtk_widget_show (config);
 	gtk_container_add (GTK_CONTAINER (menu_edit), config);
 
-	config_font = gtk_menu_item_new_with_mnemonic (_("_Configure_Options"));
-	gtk_widget_show (config_font);
-	gtk_container_add (GTK_CONTAINER (menu_edit), config_font);
+	config_option = gtk_menu_item_new_with_mnemonic (_("_Configure_Options"));
+	gtk_widget_show (config_option);
+	gtk_container_add (GTK_CONTAINER (menu_edit), config_option);
 
 	menuitem_tool = gtk_menu_item_new_with_mnemonic (_("_Tools"));
 	gtk_widget_show (menuitem_tool);
@@ -154,8 +154,8 @@ GtkWidget* create_menu (GtkWidget *main_windown, GtkWidget *main_vbox,
 	g_signal_connect ((gpointer) config, "activate",
 		G_CALLBACK (on_config_activate),
 		(gpointer)xcomdata);
-	g_signal_connect ((gpointer) config_font, "activate",
-		G_CALLBACK (on_config_font_activate),
+	g_signal_connect ((gpointer) config_option, "activate",
+		G_CALLBACK (on_config_option_activate),
 		(gpointer)xcomdata);
 	g_signal_connect ((gpointer) ascii_talbe, "activate",
 		G_CALLBACK (on_ascii_talbe_activate),

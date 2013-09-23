@@ -43,7 +43,8 @@ GtkWidget* create_about_xgcom (GtkWidget *main_window)
 	if (about_xgcom_icon_pixbuf)
 	{
 		gtk_window_set_icon (GTK_WINDOW (about_xgcom), about_xgcom_icon_pixbuf);
-		gdk_pixbuf_unref (about_xgcom_icon_pixbuf);
+		//gdk_pixbuf_unref (about_xgcom_icon_pixbuf);
+		g_object_unref (about_xgcom_icon_pixbuf);
 	}
 
 	dialog_vbox = GTK_DIALOG (about_xgcom)->vbox;

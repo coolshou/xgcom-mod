@@ -85,7 +85,7 @@ on_config_activate (GtkMenuItem *menuitem, gpointer user_data)
 }
 
 void
-on_config_font_activate (GtkMenuItem *menuitem, gpointer user_data)
+on_config_option_activate (GtkMenuItem *menuitem, gpointer user_data)
 {
 	struct xcomdata *xcomdata = (struct xcomdata *)user_data;
 	//TODO

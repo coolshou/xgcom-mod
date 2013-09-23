@@ -41,9 +41,11 @@ create_leftvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 	GtkWidget *hbox_send;
 	GtkWidget *send_num_label;
 	GtkWidget *send_num;
+	gchar *send_num_str = "0";
 	GtkWidget *hbox_rcv;
 	GtkWidget *rcv_num_label;
 	GtkWidget *rcv_num;
+	gchar *rcv_num_str = "0";
 	GtkWidget *fixed9;
 	GtkWidget *fixed10;
 	GtkWidget *fixed11;
@@ -84,6 +86,7 @@ create_leftvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 	GtkWidget *hbox_interval;
 	GtkWidget *time_label;
 	GtkWidget *time_interval;
+	gchar *time_interval_str = "100";
 	GtkWidget *fixed29;
 	GtkWidget *fixed30;
 	GtkWidget *fixed31;
@@ -230,8 +233,11 @@ create_leftvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 	gtk_box_pack_start (GTK_BOX (hbox_send), send_num, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (send_num, 40, -1);
 	gtk_entry_set_invisible_char (GTK_ENTRY (send_num), 9679);
-	gtk_entry_set_editable(GTK_ENTRY(send_num), FALSE);
-	gtk_entry_append_text (GTK_ENTRY (send_num), "0");
+	//gtk_entry_set_editable(GTK_ENTRY(send_num), FALSE);
+	gtk_editable_set_editable (GTK_EDITABLE (send_num), FALSE);
+	//gtk_entry_append_text (GTK_ENTRY (send_num), "0");
+	gint send_num_str_position = 0;
+	gtk_editable_insert_text(GTK_EDITABLE(send_num), send_num_str, -1, &send_num_str_position); 
 	
 	hbox_rcv = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox_rcv);
@@ -248,8 +254,12 @@ create_leftvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 	gtk_box_pack_start (GTK_BOX (hbox_rcv), rcv_num, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (rcv_num, 40, -1);
 	gtk_entry_set_invisible_char (GTK_ENTRY (rcv_num), 9679);
-	gtk_entry_set_editable(GTK_ENTRY(rcv_num), FALSE);
-	gtk_entry_append_text (GTK_ENTRY (rcv_num), "0");
+	//gtk_entry_set_editable(GTK_ENTRY(rcv_num), FALSE);
+	gtk_editable_set_editable (GTK_EDITABLE (rcv_num), FALSE);
+	//gtk_entry_append_text (GTK_ENTRY (rcv_num), "0");
+	//gtk_editable_insert_text(GTK_EDITABLE(rcv_num), "0", 1,0); 
+	gint rcv_num_str_position = 0;
+	gtk_editable_insert_text(GTK_EDITABLE(rcv_num), rcv_num_str, -1, &rcv_num_str_position); 
 
 	fixed9 = gtk_fixed_new ();
 	gtk_widget_show (fixed9);
@@ -357,13 +367,13 @@ create_leftvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 	table_free_space = gtk_table_new (1, 1, FALSE);
 	gtk_widget_show (table_free_space);
 	gtk_box_pack_start (GTK_BOX (left_foot_vbox), table_free_space, FALSE, FALSE, 0);
-	
+/*	
 	fixed_free_space = gtk_fixed_new ();
 	gtk_widget_show (fixed_free_space);
 	gtk_table_attach (GTK_TABLE (fixed_free_space), fixed_free_space, 1, 1, 1, 1,
 		(GtkAttachOptions) (GTK_FILL),
 		(GtkAttachOptions) (GTK_FILL), 0, 0);
-		
+*/		
 	table_send_file = gtk_table_new (4, 3, FALSE);
 	gtk_widget_show (table_send_file);
 	gtk_box_pack_start (GTK_BOX (left_foot_vbox), table_send_file, FALSE, FALSE, 0);
@@ -464,9 +474,6 @@ create_leftvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 
 	hbox_interval = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (hbox_interval);
-	//gtk_table_attach (GTK_TABLE (table_hex_send), hbox_interval, 1, 2, 2, 3,
-	//	(GtkAttachOptions) (GTK_FILL),
-	//	(GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
 	gtk_table_attach (GTK_TABLE (table_hex_send), hbox_interval, 1, 2, 2, 3,
 		(GtkAttachOptions) (GTK_FILL),
 		(GtkAttachOptions) (GTK_EXPAND | GTK_FILL), 0, 0);
@@ -480,8 +487,11 @@ create_leftvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 	gtk_box_pack_start (GTK_BOX (hbox_interval), time_interval, TRUE, TRUE, 0);
 	gtk_widget_set_size_request (time_interval, 40, -1);
 	gtk_entry_set_invisible_char (GTK_ENTRY (time_interval), 9679);
-	gtk_entry_append_text (GTK_ENTRY (time_interval), "100");
-
+	//gtk_entry_append_text (GTK_ENTRY (time_interval), "100");
+	//gtk_editable_insert_text(GTK_EDITABLE(time_interval), "100", 1,0); 
+	gint time_interval_str_position = 0 ;
+	gtk_editable_insert_text(GTK_EDITABLE(time_interval), time_interval_str, -1, &time_interval_str_position); 
+	
 	fixed29 = gtk_fixed_new ();
 	gtk_widget_show (fixed29);
 	gtk_table_attach (GTK_TABLE (table_hex_send), fixed29, 0, 1, 0, 1,

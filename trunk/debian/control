@@ -10,7 +10,7 @@ Homepage: http://code.google.com/p/xgcom/
 
 Package: xgcom
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, fonts-droid
 Description: A gui tools to help guys debug programs remotely by series port, like minicom
  1.send and receive data from com
  2.configure the com (speed,data bit, stop bit, odd bit, contrl data)

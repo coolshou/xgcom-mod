@@ -1,6 +1,11 @@
 # List of source files containing translatable strings.
 
+src/CfgOptionFace.c
+src/About.c
+src/CfgFace.c
 src/main.c
 src/interface.c
 src/callbacks.c
 src/support.c
+src/LeftVboxFace.c
+src/MenuFace.c

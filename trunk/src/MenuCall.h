@@ -37,7 +37,7 @@ void
 on_config_activate (GtkMenuItem *menuitem, gpointer user_data);
 
 void
-on_config_font_activate (GtkMenuItem *menuitem, gpointer user_data);
+on_config_option_activate (GtkMenuItem *menuitem, gpointer user_data);
 
 void
 on_ascii_talbe_activate (GtkMenuItem *menuitem, gpointer user_data);

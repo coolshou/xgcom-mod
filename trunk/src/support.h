@@ -91,6 +91,7 @@ struct xcomdata{
 	gchar		send_file[256];	//the path of file you want to send
 	gchar		save_file[356];	//the path of file you want to save 
 								//the date form com
+								
 	GtkWidget *gmain;
 	GtkWidget *grcv_text;
 	GtkWidget *gsend_text;

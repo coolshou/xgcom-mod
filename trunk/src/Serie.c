@@ -34,8 +34,9 @@
 #include "SendFile.h"
 
 static int ufd = -1;
-static int uart_stat = 0;
-static guint callback_handler;
+static int uart_stat = FALSE;
+//static guint callback_handler;
+guint callback_handler_in, callback_handler_err;
 static struct termios termios_save;
 
 static int is_save_vte_data = 0;
@@ -69,10 +70,14 @@ int open_uart(struct xcomdata *xcomdata)
 
 void check_port(struct xcomdata *xcomdata)
 {
+	//Ferme_Port();
 	if (ufd != -1) {
 		if (uart_stat) {
-			gtk_input_remove(callback_handler);
-			uart_stat = 0;
+			//not work in gtk3
+			//gtk_input_remove(callback_handler);
+			g_source_remove(callback_handler_in) ;
+			g_source_remove(callback_handler_err) ;
+			uart_stat = FALSE;
 		}
 		tcflush(ufd, TCOFLUSH);  
 		tcflush(ufd, TCIFLUSH);
@@ -82,6 +87,12 @@ void check_port(struct xcomdata *xcomdata)
 		close(ufd);
 		ufd = -1;
 	}
+}
+
+gboolean io_err(GIOChannel* src, GIOCondition cond, gpointer data)
+{
+    check_port(data);
+    return TRUE;
 }
 
 int config_uart(struct xcomdata *xcomdata)
@@ -203,10 +214,21 @@ int config_uart(struct xcomdata *xcomdata)
 	tcsetattr(ufd, TCSANOW, &termios_p);
 	tcflush(ufd, TCOFLUSH);  
 	tcflush(ufd, TCIFLUSH);
-	
-	callback_handler = gtk_input_add_full(ufd, GDK_INPUT_READ, 
-			(GdkInputFunction)read_uart, NULL, NULL, NULL);
-	uart_stat = 1;
+	// not in gtk3
+	//callback_handler = gtk_input_add_full(ufd, GDK_INPUT_READ, 
+	//		(GdkInputFunction)read_uart, NULL, NULL, NULL);
+	callback_handler_in = g_io_add_watch_full(g_io_channel_unix_new(ufd), 
+				10,
+				G_IO_IN, 
+				(GIOFunc)read_uart, 
+				NULL, NULL);
+	callback_handler_err = g_io_add_watch_full(g_io_channel_unix_new(ufd),
+				10,
+				G_IO_ERR, 
+				(GIOFunc)io_err, 
+				NULL, NULL);
+				
+	uart_stat = TRUE;
 
 	return 0;  
 }
@@ -221,22 +243,22 @@ int write_uart(char *buf, int len)
 			perror("write:");
 	debug_p("write_uart: ret = %d ufd: %d\n", ret, ufd);
 	send_sum += ret;
-	sprintf(num, "%d", send_sum);
+	sprintf(num, "%ld", send_sum);
 	gtk_entry_set_text(GTK_ENTRY(send_num), num);
 	return ret;
 }
 
-//gboolean
-//read_uart (GIOChannel *source, GIOCondition condition, gpointer data)
+gboolean
+read_uart (GIOChannel *source, GIOCondition condition, gpointer data)
 //void read_uart(gpointer data, gint source, GdkInputCondition condition)
 //void *read_uart(void *data)
-int read_uart(void)
+//int read_uart(void)
 {	
 	int len = 0;
-	unsigned char frame[1024] = {0};	
+	unsigned char frame[ BUFFER_RECEPTION ] = {0};	
 	char num[32] = {0};
 
-	len = read(ufd, frame, 1024);
+	len = read(ufd, frame, BUFFER_RECEPTION);
 	if (len < 0) {
 		perror("read error:\n");
 		return -1;
@@ -252,7 +274,7 @@ int read_uart(void)
 	}
 	memset(frame,'\0',len);
 	data_sum += len;
-	sprintf(num, "%d", data_sum);
+	sprintf(num, "%ld", data_sum);
 	gtk_entry_set_text(GTK_ENTRY(rcv_num), num);
 
 	return 0; 
@@ -261,13 +283,17 @@ int read_uart(void)
 void close_uart()
 {
 	int ret = 0;
-	if (callback_handler)
-		gtk_input_remove(callback_handler);
+	if (callback_handler_in)
+//		gtk_input_remove(callback_handler);
+		g_source_remove(callback_handler_in);		
+	if (callback_handler_err)
+		g_source_remove(callback_handler_err);		
+
 	if (ufd)
 		ret =close(ufd);
 	debug_p("close uart 00: %d \n", ret);
 	ufd = -1;
-	uart_stat = 0;
+	uart_stat = FALSE;
 	//g_source_remove (callback_handler);
 	//g_io_channel_shutdown (gio, TRUE, NULL);
 	//g_io_channel_unref(gio);		
@@ -515,7 +541,7 @@ void send_uboot(struct xcomdata *xcomdata)
 	unsigned long i;
 	int fd;
 	int ret;
-	
+
 	//xcomdata->choose_file = 1;
 	//window_file_choose = (GtkWidget *)create_file_choose(xcomdata);
 	//gtk_widget_show (window_file_choose);
@@ -544,7 +570,7 @@ void send_uboot(struct xcomdata *xcomdata)
 			create_xgcom_msg(xcomdata->gmain, "read file error\n");
 			return;
 		} else {
-			write(ufd, (unsigned char *)buf, len);
+			ret = write(ufd, (unsigned char *)buf, len);
 		}
 		i += len;
 		//debug_p(buf);

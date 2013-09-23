@@ -74,9 +74,9 @@ GtkWidget* create_rightvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 	vte_terminal_set_scrollback_lines(VTE_TERMINAL(rcv_text), MAX_VTE_SCROLL_LINE);
 	vte_terminal_set_backspace_binding(VTE_TERMINAL(rcv_text),
 				     VTE_ERASE_ASCII_BACKSPACE);
-	//jimmu			     
+	//jimmy			     
 	PangoFontDescription *font_desc;
-	font_desc = vte_terminal_get_font(rcv_text);
+	font_desc = vte_terminal_get_font(VTE_TERMINAL(rcv_text));
 	printf("font family: %s \n",pango_font_description_get_family(font_desc)  );
 	if (pango_font_description_get_size_is_absolute(font_desc)) {
 		printf("font size: %i\n", pango_font_description_get_size(font_desc) );
@@ -104,8 +104,8 @@ GtkWidget* create_rightvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 		hints.height_inc = vte_terminal_get_char_height(VTE_TERMINAL(rcv_text));
 		hints.min_width = hints.base_width + hints.width_inc;
 		hints.min_height = hints.base_height + hints.height_inc;
-		gtk_window_set_geometry_hints(GTK_WINDOW(scrolledwindow2), GTK_WIDGET(rcv_text), &hints,
-			GDK_HINT_RESIZE_INC | GDK_HINT_MIN_SIZE | 	GDK_HINT_BASE_SIZE);
+//		gtk_window_set_geometry_hints(GTK_WINDOW(scrolledwindow2), GTK_WIDGET(rcv_text), &hints,
+//			GDK_HINT_RESIZE_INC | GDK_HINT_MIN_SIZE | 	GDK_HINT_BASE_SIZE);
 	}
 	#if GTK_CHECK_VERSION(2,91,5)
 		gtk_widget_set_size_request(rcv_text, 80*hints.width_inc+hints.base_width,
