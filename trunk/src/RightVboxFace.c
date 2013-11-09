@@ -14,6 +14,7 @@
  */
 #include <string.h>
 #include <vte/vte.h>
+
 #include "RightVboxFace.h"
 
 #define MAX_VTE_SCROLL_LINE 8192	
@@ -31,7 +32,8 @@ static void Got_Input(VteTerminal *, gchar *, guint, gpointer);
 GtkWidget* create_rightvbox (GtkWidget *main_window, GtkWidget *body_hbox, 
 			GtkAccelGroup *accel_group, gpointer data)
 {
-	GtkWidget *right_vbox;
+	GtkWidget *right_vgrid;
+	
 	GtkWidget *right_vpaned;
 	GtkWidget *rcv_frame;
 	GtkWidget *alignment2;
@@ -45,110 +47,125 @@ GtkWidget* create_rightvbox (GtkWidget *main_window, GtkWidget *body_hbox,
 	
 	xcomdata = (struct xcomdata *)data;
 	
-	right_vbox = gtk_vbox_new (FALSE, 0);
-	gtk_widget_show (right_vbox);
-	gtk_box_pack_start (GTK_BOX (body_hbox), right_vbox, TRUE, TRUE, 0);
-	gtk_widget_set_size_request (right_vbox, 500, -1);
-
-	right_vpaned = gtk_vpaned_new ();
-	gtk_widget_show (right_vpaned);
-	gtk_container_add (GTK_CONTAINER (right_vbox), right_vpaned);
-  
-	rcv_frame = gtk_frame_new (NULL);
-	gtk_widget_show (rcv_frame);
-	//gtk_box_pack_start (GTK_BOX (right_vbox), rcv_frame, TRUE, TRUE, 0);
-	gtk_paned_pack1 (GTK_PANED (right_vpaned), rcv_frame, FALSE, TRUE);
-	gtk_widget_set_size_request (rcv_frame, -1, 380);
-
-	alignment2 = gtk_alignment_new (0.5, 0.5, 1, 1);
-	gtk_widget_show (alignment2);
-	gtk_container_add (GTK_CONTAINER (rcv_frame), alignment2);
-
-	scrolledwindow2 = gtk_scrolled_window_new (NULL, NULL);
-	gtk_widget_show (scrolledwindow2);
-	gtk_container_add (GTK_CONTAINER (alignment2), scrolledwindow2);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow2),  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow2), GTK_SHADOW_IN);
-
-	rcv_text = vte_terminal_new();
-	vte_terminal_set_scrollback_lines(VTE_TERMINAL(rcv_text), MAX_VTE_SCROLL_LINE);
-	vte_terminal_set_backspace_binding(VTE_TERMINAL(rcv_text),
-				     VTE_ERASE_ASCII_BACKSPACE);
-	//jimmy			     
-	PangoFontDescription *font_desc;
-	font_desc = vte_terminal_get_font(VTE_TERMINAL(rcv_text));
-	printf("font family: %s \n",pango_font_description_get_family(font_desc)  );
-	if (pango_font_description_get_size_is_absolute(font_desc)) {
-		printf("font size: %i\n", pango_font_description_get_size(font_desc) );
-	} else {
-		printf("font size: %i\n", pango_font_description_get_size(font_desc) / PANGO_SCALE );		
-	}
-	//TODO: get font family from config file
-	//vte_terminal_set_font_from_string(VTE_TERMINAL(rcv_text), "Droid Sans Mono 12");
-	pango_font_description_set_family(font_desc, "Droid Sans Mono");
-	vte_terminal_set_font(VTE_TERMINAL(rcv_text), font_desc);
-
-	//end 
-	gtk_widget_show (rcv_text);
-	gtk_container_add (GTK_CONTAINER (scrolledwindow2), rcv_text);
+	right_vgrid = gtk_grid_new();
+	gtk_widget_set_hexpand (right_vgrid, TRUE);
+	gtk_widget_set_halign (right_vgrid, GTK_ALIGN_FILL);
+	gtk_widget_set_vexpand (right_vgrid, TRUE);
+	gtk_widget_set_valign (right_vgrid, GTK_ALIGN_FILL);
 	
-	//jimmy
-	GdkGeometry hints = {0};
-	GtkBorder *inner_border = NULL;
-	gtk_widget_style_get(GTK_WIDGET(rcv_text), "inner-border", &inner_border, NULL);
-	if (inner_border)
-	{
-		hints.base_width = inner_border->left + inner_border->right;
-		hints.base_height = inner_border->top + inner_border->bottom;
-		hints.width_inc = vte_terminal_get_char_width(VTE_TERMINAL(rcv_text));
-		hints.height_inc = vte_terminal_get_char_height(VTE_TERMINAL(rcv_text));
-		hints.min_width = hints.base_width + hints.width_inc;
-		hints.min_height = hints.base_height + hints.height_inc;
-//		gtk_window_set_geometry_hints(GTK_WINDOW(scrolledwindow2), GTK_WIDGET(rcv_text), &hints,
-//			GDK_HINT_RESIZE_INC | GDK_HINT_MIN_SIZE | 	GDK_HINT_BASE_SIZE);
-	}
-	#if GTK_CHECK_VERSION(2,91,5)
-		gtk_widget_set_size_request(rcv_text, 80*hints.width_inc+hints.base_width,
-							  24*hints.height_inc+hints.base_height);
-	#endif
-	//end
+	gtk_widget_show (right_vgrid);
+	gtk_grid_attach (GTK_GRID (body_hbox), right_vgrid, 1, 0, 1, 1);
+	gtk_widget_set_size_request (right_vgrid, 680, 500);
 	
-	rcv_label = gtk_label_new (_("Receive:"));
-	gtk_widget_show (rcv_label);
-	gtk_frame_set_label_widget (GTK_FRAME (rcv_frame), rcv_label);
-	gtk_label_set_use_markup (GTK_LABEL (rcv_label), TRUE);
+		right_vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
+		gtk_widget_set_hexpand (right_vpaned, TRUE);
+		gtk_widget_set_halign (right_vpaned, GTK_ALIGN_FILL);
+		gtk_widget_set_vexpand (right_vpaned, TRUE);
+		gtk_widget_set_valign (right_vpaned, GTK_ALIGN_FILL);
+		
+		gtk_widget_show (right_vpaned);
+		gtk_container_add (GTK_CONTAINER (right_vgrid), right_vpaned);
+	  
+			rcv_frame = gtk_frame_new (NULL);
+			gtk_widget_show (rcv_frame);
+			gtk_paned_pack1 (GTK_PANED (right_vpaned), rcv_frame, TRUE, FALSE);
+			gtk_widget_set_size_request (rcv_frame, -1, 480);
 
-	send_frame = gtk_frame_new (NULL);
-	gtk_widget_show (send_frame);
-	//gtk_box_pack_start (GTK_BOX (right_vbox), send_frame, TRUE, TRUE, 0);
-	gtk_paned_pack2 (GTK_PANED (right_vpaned), send_frame, FALSE, TRUE);
+			rcv_label = gtk_label_new (_("Receive:"));
+			gtk_widget_show (rcv_label);
+			gtk_frame_set_label_widget (GTK_FRAME (rcv_frame), rcv_label);
+			gtk_label_set_use_markup (GTK_LABEL (rcv_label), TRUE);
 
-	alignment1 = gtk_alignment_new (0.5, 0.5, 1, 1);
-	gtk_widget_show (alignment1);
-	gtk_container_add (GTK_CONTAINER (send_frame), alignment1);
+			alignment2 = gtk_alignment_new (0.5, 0.5, 1, 1);
+			gtk_widget_show (alignment2);
+			gtk_container_add (GTK_CONTAINER (rcv_frame), alignment2);
 
-	scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
-	gtk_widget_show (scrolledwindow1);
-	gtk_container_add (GTK_CONTAINER (alignment1), scrolledwindow1);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow1),  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_SHADOW_IN);
+			scrolledwindow2 = gtk_scrolled_window_new (NULL, NULL);
+			gtk_widget_show (scrolledwindow2);
+			gtk_container_add (GTK_CONTAINER (alignment2), scrolledwindow2);
+			gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow2),  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow2), GTK_SHADOW_IN);
 
-	send_text = gtk_text_view_new ();
-	gtk_widget_show (send_text);
-	gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (send_text), GTK_WRAP_CHAR);
-	gtk_container_add (GTK_CONTAINER (scrolledwindow1), send_text);
+			rcv_text = vte_terminal_new();
+			vte_terminal_set_scrollback_lines(VTE_TERMINAL(rcv_text), MAX_VTE_SCROLL_LINE);
+			vte_terminal_set_backspace_binding(VTE_TERMINAL(rcv_text),
+							 VTE_ERASE_ASCII_BACKSPACE);
+			//TODO: rcv_text not expand full in scrolledwindow2
+			gtk_widget_show (rcv_text);
+			gtk_container_add (GTK_CONTAINER (scrolledwindow2), rcv_text);
+
+			//TODO jimmy	?where to get default font		     
+			debug_p("PangoFontDescription ========\n");	
+
+			PangoFontDescription *font_desc;
+			font_desc = vte_terminal_get_font(VTE_TERMINAL(rcv_text));
+			if (font_desc != NULL) {
+				printf("font family: %s \n",pango_font_description_get_family(font_desc)  );
+				if (pango_font_description_get_size_is_absolute(font_desc)) {
+					printf("font size: %i\n", pango_font_description_get_size(font_desc) );
+				} else {
+					printf("font size: %i\n", pango_font_description_get_size(font_desc) / PANGO_SCALE );		
+				}
+				//TODO: get font family from config file
+				//vte_terminal_set_font_from_string(VTE_TERMINAL(rcv_text), "Droid Sans Mono 12");
+				pango_font_description_set_family(font_desc, "Droid Sans Mono");
+				vte_terminal_set_font(VTE_TERMINAL(rcv_text), font_desc);
+				//end 		
+			}
+
+			//jimmy
+			/*
+			GdkGeometry hints = {0};
+			GtkBorder *inner_border = NULL;
+			gtk_widget_style_get(GTK_WIDGET(rcv_text), "inner-border", &inner_border, NULL);
+			if (inner_border)
+			{
+				hints.base_width = inner_border->left + inner_border->right;
+				hints.base_height = inner_border->top + inner_border->bottom;
+				hints.width_inc = vte_terminal_get_char_width(VTE_TERMINAL(rcv_text));
+				hints.height_inc = vte_terminal_get_char_height(VTE_TERMINAL(rcv_text));
+				hints.min_width = hints.base_width + hints.width_inc;
+				hints.min_height = hints.base_height + hints.height_inc;
+		//		gtk_window_set_geometry_hints(GTK_WINDOW(scrolledwindow2), GTK_WIDGET(rcv_text), &hints,
+		//			GDK_HINT_RESIZE_INC | GDK_HINT_MIN_SIZE | 	GDK_HINT_BASE_SIZE);
+			}
+			#if GTK_CHECK_VERSION(2,91,5)
+				gtk_widget_set_size_request(rcv_text, 80*hints.width_inc+hints.base_width,
+									  24*hints.height_inc+hints.base_height);
+			#endif
+			//end
+*/
+			send_frame = gtk_frame_new (NULL);
+			gtk_widget_set_size_request (send_frame, -1, 100);
+			gtk_widget_show (send_frame);
+			gtk_paned_pack2 (GTK_PANED (right_vpaned), send_frame, FALSE, FALSE);
+
+			send_label = gtk_label_new (_("Send:"));
+			gtk_widget_show (send_label);
+			gtk_frame_set_label_widget (GTK_FRAME (send_frame), send_label);
+			gtk_label_set_use_markup (GTK_LABEL (send_label), TRUE);
+
+			alignment1 = gtk_alignment_new (0.5, 0.5, 1, 1);
+			gtk_widget_show (alignment1);
+			gtk_container_add (GTK_CONTAINER (send_frame), alignment1);
+
+			scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
+			gtk_widget_show (scrolledwindow1);
+			gtk_container_add (GTK_CONTAINER (alignment1), scrolledwindow1);
+			gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow1),  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+			gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow1), GTK_SHADOW_IN);
+
+			send_text = gtk_text_view_new ();
+			gtk_widget_show (send_text);
+			gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (send_text), GTK_WRAP_CHAR);
+			gtk_container_add (GTK_CONTAINER (scrolledwindow1), send_text);
 	
-	send_label = gtk_label_new (_("Send:"));
-	gtk_widget_show (send_label);
-	gtk_frame_set_label_widget (GTK_FRAME (send_frame), send_label);
-	gtk_label_set_use_markup (GTK_LABEL (send_label), TRUE);
-	
-	g_signal_connect_after(GTK_OBJECT(rcv_text), "commit", G_CALLBACK(Got_Input), NULL);
+	g_signal_connect_after(G_OBJECT(rcv_text), "commit", G_CALLBACK(Got_Input), NULL);
 	
 	xcomdata->grcv_text = rcv_text;
 	xcomdata->gsend_text = send_text;
 
-	return right_vbox;
+	return right_vgrid;
 }
 
 void put_hexadecimal(gchar *string, guint size)

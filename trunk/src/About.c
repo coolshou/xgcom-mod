@@ -36,7 +36,7 @@ GtkWidget* create_about_xgcom (GtkWidget *main_window)
 	GtkWidget *close_about;
 
 	about_xgcom = gtk_dialog_new_with_buttons("About XGCom", 
-	GTK_WINDOW(main_window), GTK_DIALOG_DESTROY_WITH_PARENT,NULL);
+	GTK_WINDOW(main_window), GTK_DIALOG_DESTROY_WITH_PARENT, NULL);
 	gtk_window_set_type_hint (GTK_WINDOW (about_xgcom), GDK_WINDOW_TYPE_HINT_DIALOG);
 	
 	about_xgcom_icon_pixbuf = create_pixbuf ("xgcom.png");
@@ -47,10 +47,12 @@ GtkWidget* create_about_xgcom (GtkWidget *main_window)
 		g_object_unref (about_xgcom_icon_pixbuf);
 	}
 
-	dialog_vbox = GTK_DIALOG (about_xgcom)->vbox;
+	//dialog_vbox = GTK_DIALOG (about_xgcom)->vbox;
+	dialog_vbox = gtk_dialog_get_content_area(GTK_DIALOG (about_xgcom));
 	gtk_widget_show (dialog_vbox);
 
-	vbox_xgcom = gtk_vbox_new (FALSE, 0);
+	//vbox_xgcom = gtk_vbox_new (FALSE, 0);
+	vbox_xgcom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_widget_show (vbox_xgcom);
 	gtk_box_pack_start (GTK_BOX (dialog_vbox), vbox_xgcom, TRUE, TRUE, 0);
 
@@ -67,20 +69,22 @@ GtkWidget* create_about_xgcom (GtkWidget *main_window)
 	gtk_widget_show (label_author);
 	gtk_box_pack_start (GTK_BOX (vbox_xgcom), label_author, FALSE, FALSE, 0);
 
-	button_close = gtk_button_new_with_mnemonic (_("http://zhwen.org"));
+	button_close = gtk_button_new_with_mnemonic (_("https://code.google.com/p/xgcom-mod/"));
 	gtk_widget_show (button_close);
 	gtk_box_pack_start (GTK_BOX (vbox_xgcom), button_close, FALSE, FALSE, 0);
 	gtk_button_set_relief (GTK_BUTTON (button_close), GTK_RELIEF_NONE);
 
-	dialog_action_area = GTK_DIALOG (about_xgcom)->action_area;
-		gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area), GTK_BUTTONBOX_SPREAD);
+	//dialog_action_area = GTK_DIALOG (about_xgcom)->action_area;
+	dialog_action_area = gtk_dialog_get_action_area(GTK_DIALOG (about_xgcom));
+	gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area), GTK_BUTTONBOX_SPREAD);
 	gtk_widget_show (dialog_action_area);
 
 	close_about = gtk_button_new_from_stock ("gtk-close");
 	gtk_widget_show (close_about);
 	gtk_dialog_add_action_widget (GTK_DIALOG (about_xgcom), close_about, GTK_RESPONSE_CLOSE);
-	GTK_WIDGET_SET_FLAGS (close_about, GTK_CAN_DEFAULT);
-
+	//GTK_WIDGET_SET_FLAGS (close_about, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_focus(close_about, TRUE);
+	
 	g_signal_connect ((gpointer) button_close, "clicked",
 		G_CALLBACK (on_button_link_clicked), NULL);
 	g_signal_connect ((gpointer) close_about, "clicked",
@@ -102,7 +106,7 @@ void
 on_button_link_clicked (GtkButton *button, gpointer user_data)
 {
 	gchar tmp[80];
-	g_snprintf(tmp, 80, "firefox http://zhwen.org & >/dev/null");
+	g_snprintf(tmp, 80, "firefox -new-tab https://code.google.com/p/xgcom-mod/ & >/dev/null");
 	system(tmp);
 }
 
@@ -254,7 +258,8 @@ GtkWidget* create_ascii_table (void)
 	gtk_window_set_destroy_with_parent (GTK_WINDOW (ascii_table), TRUE);
 	gtk_window_set_type_hint (GTK_WINDOW (ascii_table), GDK_WINDOW_TYPE_HINT_DIALOG);
 
-	ascii_vbox = GTK_DIALOG (ascii_table)->vbox;
+	//ascii_vbox = GTK_DIALOG (ascii_table)->vbox;
+	ascii_vbox = gtk_dialog_get_content_area(GTK_DIALOG (ascii_table));
 	gtk_widget_show (ascii_vbox);
 
 	scrolledwindow_ascii = gtk_scrolled_window_new (NULL, NULL);
@@ -267,15 +272,17 @@ GtkWidget* create_ascii_table (void)
 	gtk_widget_show (text_ascii);
 	gtk_container_add (GTK_CONTAINER (scrolledwindow_ascii), text_ascii);
 
-	dialog_action_area = GTK_DIALOG (ascii_table)->action_area;
+	//dialog_action_area = GTK_DIALOG (ascii_table)->action_area;
+	dialog_action_area = gtk_dialog_get_action_area(GTK_DIALOG (ascii_table));
 	gtk_widget_show (dialog_action_area);
 	gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area), GTK_BUTTONBOX_END);
 
 	close_ascii = gtk_button_new_from_stock ("gtk-close");
 	gtk_widget_show (close_ascii);
 	gtk_dialog_add_action_widget (GTK_DIALOG (ascii_table), close_ascii, GTK_RESPONSE_CLOSE);
-	GTK_WIDGET_SET_FLAGS (close_ascii, GTK_CAN_DEFAULT);
-
+	//GTK_WIDGET_SET_FLAGS (close_ascii, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_focus(close_ascii, TRUE);
+	
 	g_signal_connect ((gpointer) close_ascii, "clicked",
 		    G_CALLBACK (on_close_ascii_clicked),
 		    ascii_table);
@@ -284,6 +291,7 @@ GtkWidget* create_ascii_table (void)
 	gtk_text_buffer_set_text (GTK_TEXT_BUFFER(buff), buffer, -1);
 	return ascii_table;
 }
+
 void
 on_close_ascii_clicked (GtkButton *button, gpointer user_data)
 {

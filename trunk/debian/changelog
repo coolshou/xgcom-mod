@@ -1,8 +1,9 @@
-xgcom (0.04.3-3) UNRELEASED; urgency=low
+xgcom (0.5.0) UNRELEASED; urgency=low
 
   * set vte font to "Droid Sans Mono 12"
+  * port to gtk3
 
- -- coolshou <coolshou@coolshou-ubuntu>  Thu, 20 Aug  2013 10:12:22 +0800
+ -- coolshou <coolshou@coolshou-ubuntu>  Tue, 24 Sep 2013 21:21:37 +0800
 
 xgcom (0.04.2-1svn48) UNRELEASED; urgency=low
 

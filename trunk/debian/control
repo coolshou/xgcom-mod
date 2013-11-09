@@ -2,10 +2,13 @@ Source: xgcom
 Section: comm
 Priority: extra
 Maintainer: coolshou <coolshou@coolshou-ubuntu>
-Build-Depends: debhelper (>= 8.0.0), autotools-dev, libvte-dev, libatk1.0-dev, libgtk2.0-dev, libpango1.0-dev, libfreetype6-dev, libfontconfig1-dev, libcairo2-dev, libx11-dev, libgdk-pixbuf2.0-dev, libglib2.0-dev 
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, libatk1.0-dev,
+ libgtk-3-dev, libpango1.0-dev, libfreetype6-dev, libfontconfig1-dev, 
+ libcairo2-dev, libx11-dev, libgdk-pixbuf2.0-dev, libglib2.0-dev, 
+ libvte-2.90-dev
 Standards-Version: 3.9.3
-Homepage: http://code.google.com/p/xgcom/
-#Vcs-Git: git://git.debian.org/collab-maint/xgcom.git
+Homepage: http://code.google.com/p/xgcom-mod/
+Vcs-Git: https://code.google.com/p/xgcom-mod/
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/xgcom.git;a=summary
 
 Package: xgcom

@@ -39,22 +39,26 @@ GtkWidget* create_file_choose (struct xcomdata *xcomdata)
 	}
 	gtk_window_set_type_hint (GTK_WINDOW (file_choose), GDK_WINDOW_TYPE_HINT_DIALOG);
 
-	dialog_vbox = GTK_DIALOG (file_choose)->vbox;
+	//dialog_vbox = GTK_DIALOG (file_choose)->vbox;
+	dialog_vbox = gtk_dialog_get_content_area(GTK_DIALOG (file_choose));
 	gtk_widget_show (dialog_vbox);
 
-	dialog_action_area = GTK_DIALOG (file_choose)->action_area;
+	//dialog_action_area = GTK_DIALOG (file_choose)->action_area;
+	dialog_action_area = gtk_dialog_get_action_area(GTK_DIALOG (file_choose));
 	gtk_widget_show (dialog_action_area);
 	gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area), GTK_BUTTONBOX_END);
 
 	button_cancel = gtk_button_new_from_stock ("gtk-cancel");
 	gtk_widget_show (button_cancel);
 	gtk_dialog_add_action_widget (GTK_DIALOG (file_choose), button_cancel, GTK_RESPONSE_CANCEL);
-	GTK_WIDGET_SET_FLAGS (button_cancel, GTK_CAN_DEFAULT);
+	//GTK_WIDGET_SET_FLAGS (button_cancel, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_focus(button_cancel, TRUE);
 
 	gtk_widget_show (button_ok);
 	gtk_dialog_add_action_widget (GTK_DIALOG (file_choose), button_ok, GTK_RESPONSE_OK);
-	GTK_WIDGET_SET_FLAGS (button_ok, GTK_CAN_DEFAULT);
-
+	//GTK_WIDGET_SET_FLAGS (button_ok, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_focus(button_ok, TRUE);
+	
 	g_signal_connect ((gpointer) button_cancel, "clicked",
 		    G_CALLBACK (on_button_cancel_clicked),
 		    xcomdata);

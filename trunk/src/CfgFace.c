@@ -72,7 +72,8 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	GtkWidget *dialog_vbox;
 	GtkWidget *setuo_frame;
 	GtkWidget *alignment2;
-	GtkWidget *setup_tablel;
+	//GtkWidget *setup_tablel;
+	GtkWidget *setup_grid;
 	GtkWidget *label_port;
 	GtkWidget *label_rate;
 	GtkWidget *label_dbits;
@@ -100,7 +101,8 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	gtk_window_set_type_hint (GTK_WINDOW (cfg_dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 	gtk_window_set_gravity (GTK_WINDOW (cfg_dialog), GDK_GRAVITY_CENTER);
 
-	dialog_vbox = GTK_DIALOG (cfg_dialog)->vbox;
+	//dialog_vbox = GTK_DIALOG (cfg_dialog)->vbox;
+	dialog_vbox = gtk_dialog_get_content_area(GTK_DIALOG (cfg_dialog));
 	gtk_widget_show (dialog_vbox);
 
 	setuo_frame = gtk_frame_new (NULL);
@@ -114,62 +116,48 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	gtk_container_add (GTK_CONTAINER (setuo_frame), alignment2);
 	gtk_alignment_set_padding (GTK_ALIGNMENT (alignment2), 0, 0, 12, 0);
 
-	setup_tablel = gtk_table_new (6, 2, FALSE);
-	gtk_widget_show (setup_tablel);
-	gtk_container_add (GTK_CONTAINER (alignment2), setup_tablel);
-	gtk_container_set_border_width (GTK_CONTAINER (setup_tablel), 3);
+	setup_grid = gtk_grid_new();
+	gtk_widget_show (setup_grid);
+	gtk_container_add (GTK_CONTAINER (alignment2), setup_grid);
+	gtk_container_set_border_width (GTK_CONTAINER (setup_grid), 3);
 
 	label_port = gtk_label_new (_("Port"));
 	gtk_widget_show (label_port);
-	gtk_table_attach (GTK_TABLE (setup_tablel), label_port, 0, 1, 0, 1,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (0), 0, 0);
-	gtk_widget_set_size_request (label_port, 90, -1);
-	gtk_misc_set_alignment (GTK_MISC (label_port), 0, 0.5);
+	gtk_grid_attach (GTK_GRID (setup_grid), label_port, 0, 0, 1, 1);
+	//gtk_widget_set_size_request (label_port, 90, -1);
+	//gtk_misc_set_alignment (GTK_MISC (label_port), 0, 0.5);
 
 	label_rate = gtk_label_new (_("Baud rate"));
 	gtk_widget_show (label_rate);
-	gtk_table_attach (GTK_TABLE (setup_tablel), label_rate, 0, 1, 1, 2,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment (GTK_MISC (label_rate), 0, 0.5);
+	gtk_grid_attach (GTK_GRID (setup_grid), label_rate, 0, 1, 1, 1);
+	//gtk_misc_set_alignment (GTK_MISC (label_rate), 0, 0.5);
 
 	label_dbits = gtk_label_new (_("Data bits"));
 	gtk_widget_show (label_dbits);
-	gtk_table_attach (GTK_TABLE (setup_tablel), label_dbits, 0, 1, 2, 3,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment (GTK_MISC (label_dbits), 0, 0.5);
+	gtk_grid_attach (GTK_GRID (setup_grid), label_dbits, 0, 2, 1, 1);
+	//gtk_misc_set_alignment (GTK_MISC (label_dbits), 0, 0.5);
 
 	label_sbits = gtk_label_new (_("Stop bits"));
 	gtk_widget_show (label_sbits);
-	gtk_table_attach (GTK_TABLE (setup_tablel), label_sbits, 0, 1, 3, 4,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment (GTK_MISC (label_sbits), 0, 0.5);
+	gtk_grid_attach (GTK_GRID (setup_grid), label_sbits, 0, 3, 1, 1);
+	//gtk_misc_set_alignment (GTK_MISC (label_sbits), 0, 0.5);
 
 	label_parity = gtk_label_new (_("Parity"));
 	gtk_widget_show (label_parity);
-	gtk_table_attach (GTK_TABLE (setup_tablel), label_parity, 0, 1, 4, 5,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment (GTK_MISC (label_parity), 0, 0.5);
+	gtk_grid_attach (GTK_GRID (setup_grid), label_parity, 0, 4, 1, 1);
+	//gtk_misc_set_alignment (GTK_MISC (label_parity), 0, 0.5);
 
 	label_control = gtk_label_new (_("Flow control"));
 	gtk_widget_show (label_control);
-	gtk_table_attach (GTK_TABLE (setup_tablel), label_control, 0, 1, 5, 6,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (0), 0, 0);
-	gtk_misc_set_alignment (GTK_MISC (label_control), 0, 0.5);
+	gtk_grid_attach (GTK_GRID (setup_grid), label_control, 0, 5, 1, 1);
+	//gtk_misc_set_alignment (GTK_MISC (label_control), 0, 0.5);
 
 	//com_port = gtk_combo_box_entry_new_text ();
 	//com_port = gtk_combo_box_new_with_entry();
 	com_port = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_port);
-	gtk_table_attach (GTK_TABLE (setup_tablel), com_port, 1, 2, 0, 1,
-		(GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-		(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_widget_set_size_request (com_port, 100, -1);
+	gtk_grid_attach (GTK_GRID (setup_grid), com_port, 1, 0, 1, 1);	
+	//gtk_widget_set_size_request (com_port, 100, -1);
 
 	for (i = 0; i < NUMBER_OF_DEVICES; i++) {
 		if(stat(devices_list[i], &my_stat) == 0)
@@ -179,28 +167,14 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	}
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_port), 0);
 	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_port)->child), FALSE);	
-	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_port)->child), FALSE);
+	gtk_editable_set_editable (GTK_EDITABLE (gtk_bin_get_child(GTK_BIN(com_port))), FALSE);
 
 	//com_rate = gtk_combo_box_entry_new_text ();
 	//com_rate = gtk_combo_box_new_with_entry();
 	com_rate = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_rate);
-	gtk_table_attach (GTK_TABLE (setup_tablel), com_rate, 1, 2, 1, 2,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_widget_set_size_request (com_rate, 100, -1);
-	/*
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("300"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("600"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("1200"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("2400"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("4800"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("9600"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("19200"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("38400"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("57600"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_rate), _("115200"));
-	*/
+	gtk_grid_attach (GTK_GRID (setup_grid), com_rate, 1, 1, 1, 1);	
+	//gtk_widget_set_size_request (com_rate, 100, -1);
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("300"));
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("600"));
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_rate), _("1200"));
@@ -214,22 +188,14 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_rate), 5);
 	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_rate)->child), FALSE);	 
-	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_rate)->child), FALSE);
+	gtk_editable_set_editable (GTK_EDITABLE (gtk_bin_get_child(GTK_BIN(com_rate))), FALSE);
 	
 	//com_dbits = gtk_combo_box_entry_new_text ();
 	//com_dbits = gtk_combo_box_new_with_entry();
 	com_dbits = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_dbits);
-	gtk_table_attach (GTK_TABLE (setup_tablel), com_dbits, 1, 2, 2, 3,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_widget_set_size_request (com_dbits, 100, -1);
-	/*
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_dbits), _("5"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_dbits), _("6"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_dbits), _("7"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_dbits), _("8"));
-	*/
+	gtk_grid_attach (GTK_GRID (setup_grid), com_dbits, 1, 2, 1, 1);		
+	//gtk_widget_set_size_request (com_dbits, 100, -1);
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_dbits), _("5"));
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_dbits), _("6"));
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_dbits), _("7"));
@@ -237,39 +203,27 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_dbits), 3);
 	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_dbits)->child), FALSE);  
-	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_dbits)->child), FALSE);
+	gtk_editable_set_editable (GTK_EDITABLE (gtk_bin_get_child(GTK_BIN(com_dbits))), FALSE);
 	
 	//com_sbits = gtk_combo_box_entry_new_text ();
 	//com_sbits = gtk_combo_box_new_with_entry();
 	com_sbits  = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_sbits);
-	gtk_table_attach (GTK_TABLE (setup_tablel), com_sbits, 1, 2, 3, 4,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_widget_set_size_request (com_sbits, 100, -1);
-	//gtk_combo_box_append_text (GTK_COMBO_BOX (com_sbits), _("1"));
-	//gtk_combo_box_append_text (GTK_COMBO_BOX (com_sbits), _("2"));
+	gtk_grid_attach (GTK_GRID (setup_grid), com_sbits, 1, 3, 1, 1);
+	//gtk_widget_set_size_request (com_sbits, 100, -1);
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_sbits), _("1"));
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_sbits), _("2"));
 	
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_sbits), 0);
 	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_sbits)->child), FALSE);   
-	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_sbits)->child), FALSE);
+	gtk_editable_set_editable (GTK_EDITABLE (gtk_bin_get_child(GTK_BIN(com_sbits))), FALSE);
 
 	//com_parity = gtk_combo_box_entry_new_text ();
 	//com_parity = gtk_combo_box_new_with_entry();
 	com_parity  = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_parity);
-	gtk_table_attach (GTK_TABLE (setup_tablel), com_parity, 1, 2, 4, 5,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_widget_set_size_request (com_parity, 100, -1);
-	/*
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_parity), _("None"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_parity), _("Odd"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_parity), _("Even"));
-	gtk_combo_box_append_text (GTK_COMBO_BOX (com_parity), _("Space"));
-	*/
+	gtk_grid_attach (GTK_GRID (setup_grid), com_parity, 1, 4, 1, 1);
+	//gtk_widget_set_size_request (com_parity, 100, -1);
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_parity), _("None"));
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_parity), _("Odd"));
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_parity), _("Even"));
@@ -277,33 +231,29 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	 
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_parity), 0);
 	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_parity)->child), FALSE);   
-	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_parity)->child), FALSE);
+	gtk_editable_set_editable (GTK_EDITABLE (gtk_bin_get_child(GTK_BIN(com_parity))), FALSE);
 
 	//com_flow = gtk_combo_box_entry_new_text ();
 	//com_flow = gtk_combo_box_new_with_entry();
 	com_flow  = gtk_combo_box_text_new_with_entry();
 	gtk_widget_show (com_flow);
-	gtk_table_attach (GTK_TABLE (setup_tablel), com_flow, 1, 2, 5, 6,
-		(GtkAttachOptions) (GTK_FILL),
-		(GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_widget_set_size_request (com_flow, 100, -1);
-//	gtk_combo_box_append_text (GTK_COMBO_BOX (com_flow), _("None"));
-//	gtk_combo_box_append_text (GTK_COMBO_BOX (com_flow), _("Hardware"));
-//	gtk_combo_box_append_text (GTK_COMBO_BOX (com_flow), _("Software"));
+	gtk_grid_attach (GTK_GRID (setup_grid), com_flow, 1, 5, 1, 1);
+	//gtk_widget_set_size_request (com_flow, 100, -1);
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_flow), _("None"));
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_flow), _("Hardware"));
 	gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (com_flow), _("Software"));
 	
 	gtk_combo_box_set_active(GTK_COMBO_BOX(com_flow), 0);
 	//gtk_entry_set_editable(GTK_ENTRY(GTK_BIN(com_flow)->child), FALSE);   
-	gtk_editable_set_editable (GTK_EDITABLE (GTK_BIN(com_flow)->child), FALSE);
+	gtk_editable_set_editable (GTK_EDITABLE (gtk_bin_get_child(GTK_BIN(com_flow))), FALSE);
 
 	setup_label = gtk_label_new (_("\74b\76Setup\74\57b\76"));
 	gtk_widget_show (setup_label);
 	gtk_frame_set_label_widget (GTK_FRAME (setuo_frame), setup_label);
 	gtk_label_set_use_markup (GTK_LABEL (setup_label), TRUE);
 
-	dialog_action_area1 = GTK_DIALOG (cfg_dialog)->action_area;
+	//dialog_action_area1 = GTK_DIALOG (cfg_dialog)->action_area;
+	dialog_action_area1 = gtk_dialog_get_action_area(GTK_DIALOG (cfg_dialog));
 	gtk_widget_show (dialog_action_area1);
 	gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area1), GTK_BUTTONBOX_END);
 
@@ -314,7 +264,8 @@ GtkWidget* create_configuration_dialog (struct xcomdata *xcomdata)
 	ok_button = gtk_button_new_with_mnemonic (_("Save Tmp"));
 	gtk_widget_show (ok_button);
 	gtk_dialog_add_action_widget (GTK_DIALOG (cfg_dialog), ok_button, GTK_RESPONSE_OK);
-	GTK_WIDGET_SET_FLAGS (ok_button, GTK_CAN_DEFAULT);
+	//GTK_WIDGET_SET_FLAGS (ok_button, GTK_CAN_DEFAULT);
+	gtk_widget_set_can_focus(ok_button, TRUE);
 
 	g_signal_connect ((gpointer) save_button, "clicked",
 		G_CALLBACK (on_save_button_clicked),
@@ -331,13 +282,13 @@ void get_data_from_window(struct xcomdata *xcomdata)
 	gchar *fp = NULL;
 	int row = -1;
 	
-	fp = gtk_combo_box_get_active_text(GTK_COMBO_BOX(com_port));
+	fp = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(com_port));
 	strcpy(xcomdata->comcfg.port, fp);
-	fp = gtk_combo_box_get_active_text(GTK_COMBO_BOX(com_rate));
+	fp = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(com_rate));
 	xcomdata->comcfg.baud = atoi(fp);
-	fp = gtk_combo_box_get_active_text(GTK_COMBO_BOX(com_dbits));
+	fp = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(com_dbits));
 	xcomdata->comcfg.databit = atoi(fp);
-	fp = gtk_combo_box_get_active_text(GTK_COMBO_BOX(com_sbits));
+	fp = gtk_combo_box_text_get_active_text(GTK_COMBO_BOX_TEXT(com_sbits));	
 	xcomdata->comcfg.stopbit = atoi(fp);
 	row = gtk_combo_box_get_active(GTK_COMBO_BOX(com_parity));
 	xcomdata->comcfg.parity = row;

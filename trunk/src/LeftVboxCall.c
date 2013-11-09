@@ -285,7 +285,9 @@ on_keep_send_toggled (GtkToggleButton *togglebutton, gpointer user_data)
 		xcomdata->interval = atoi(gtk_entry_get_text(GTK_ENTRY(xcomdata->ginterval)));
 		if(xcomdata->interval < 50)
 			xcomdata->interval = 50;
-		time_handl = gtk_timeout_add(xcomdata->interval, (GtkFunction) keep_send, xcomdata);
+		//time_handl = gtk_timeout_add(xcomdata->interval, (GtkFunction) keep_send, xcomdata);
+		//time_handl = gtk_timeout_add(xcomdata->interval, (GSourceFunc) keep_send, xcomdata);
+		time_handl = g_timeout_add(xcomdata->interval, (GSourceFunc) keep_send, xcomdata);
 		is_keep_send = 1;
 	}
 }
@@ -295,7 +297,8 @@ on_add_save_toggled (GtkToggleButton *togglebutton, gpointer user_data)
 {
 	struct xcomdata *xcomdata = (struct xcomdata *)user_data;
 	
-	if(GTK_TOGGLE_BUTTON(togglebutton)->active){
+//	if(GTK_TOGGLE_BUTTON(togglebutton)->active){
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(togglebutton))){
 		save_format = xcomdata->save_format = 0;
 		debug_p("add\n");
 	}
@@ -305,7 +308,8 @@ void
 on_cover_save_toggled (GtkToggleButton *togglebutton, gpointer user_data)
 {
 	struct xcomdata *xcomdata = (struct xcomdata *)user_data;
-	if(GTK_TOGGLE_BUTTON(togglebutton)->active){
+	//if(GTK_TOGGLE_BUTTON(togglebutton)->active){
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(togglebutton))){
 		save_format = xcomdata->save_format = 1;
 		debug_p("cover\n");
 	}

@@ -14,7 +14,8 @@
  */
  
 #include <dirent.h>
-#include <gdk/gdkkeysyms.h>
+//#include <gdk/gdkkeysyms.h>
+#include <gtk/gtk.h>
 
 #include "MenuFace.h"
 #include "MenuCall.h"
@@ -64,7 +65,8 @@ GtkWidget* create_menu (GtkWidget *main_windown, GtkWidget *main_vbox,
 	
 	main_menubar = gtk_menu_bar_new ();
 	gtk_widget_show (main_menubar);
-	gtk_box_pack_start (GTK_BOX (main_vbox), main_menubar, FALSE, FALSE, 0);
+	//gtk_box_pack_start (GTK_BOX (main_vbox), main_menubar, FALSE, FALSE, 0);
+	gtk_grid_attach (GTK_GRID (main_vbox), main_menubar, 0, 0, 1, 1);
 
 	menuitem_file = gtk_menu_item_new_with_mnemonic (_("_File"));
 	gtk_widget_show (menuitem_file);
@@ -81,8 +83,9 @@ GtkWidget* create_menu (GtkWidget *main_windown, GtkWidget *main_vbox,
 	gtk_widget_show (send_data);
 	gtk_container_add (GTK_CONTAINER (menu_file), send_data);
 	gtk_widget_add_accelerator (send_data, "activate", accel_group,
-		GDK_Return, (GdkModifierType) GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
-                            
+		GDK_KEY_Return, (GdkModifierType) GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+//		GDK_Return, (GdkModifierType) GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+		                            
 	quit_file = gtk_image_menu_item_new_from_stock ("gtk-quit", accel_group);
 	gtk_widget_show (quit_file);
 	gtk_container_add (GTK_CONTAINER (menu_file), quit_file);

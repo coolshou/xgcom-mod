@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <locale.h>
 
 #include "MainWindow.h"
 #include "support.h"

@@ -82,7 +82,7 @@ int read_config(struct xcomdata *xcomdata)
 void show_uart_param(struct xcomdata *xcomdata)
 {
 	gchar parameter[64];
-	sprintf(parameter, "%s B:%d D:%d S:%d P:%d F: %d\n", 
+	sprintf(parameter, "%s B:%d D:%d S:%d P:%d F: %d", 
 		xcomdata->comcfg.port,
 		xcomdata->comcfg.baud,
 		xcomdata->comcfg.databit,
