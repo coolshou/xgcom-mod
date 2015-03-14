@@ -12,3 +12,15 @@
 	xgcom$ make
 	xgcom$ sudo make install
 	xgcom$ xgcom
+
+TODO
+
+    gtk3 port
+    font config
+    vte buffer size configable
+    ascii table dialog improve
+    vte buffer/screen clean/select all/copy/past
+    window location save/restore
+    micro script interact with vte
+    right mouse menu: copy/paste
+    multi tab ( do we need this) 
