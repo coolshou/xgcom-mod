@@ -1,16 +1,13 @@
 1.project home:
-	http://code.google.com/p/xgcom/
+	https://github.com/coolshou/xgcom-mod
 
-2.get source by svn:
-	svn checkout http://xgcom.googlecode.com/svn/trunk/ xgcom
+2.get source by git:
+	git clone https://github.com/coolshou/xgcom-mod.git xgcom
 
-3.get source in tar ball:
-	http://code.google.com/p/xgcom/downloads/list
-
-4.library needed while compiling:
+3.library needed while compiling:
 	make, automake，libglib2.0-dev，libvte-dev，libgtk2.0-dev
 
-5.compile steps:
+4.compile steps:
 	xgcom$ ./autogen.sh
 	xgcom$ make
 	xgcom$ sudo make install
